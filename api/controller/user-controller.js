@@ -77,18 +77,19 @@ userRoutes.post("/register", (req, res) => {
     const newFolder = join(usersFolder, req.body.name)
     if (!existsSync(newFolder)) {
       mkdirSync(newFolder)
-      res.send('ok')
+      res.send({
+        status: 200,
+        message: "User created successfully",
+      });
     } else {
-      res.sendStatus(500)
-        .send({
-          error: 'User already exists'
-        })
+      res.sendStatus(500).send({
+        error: "User already exists",
+      });
     }
   } else {
-    res.sendStatus(500)
-      .send({
-        error: 'User name is mandatory.'
-      })
+    res.sendStatus(500).send({
+      error: "User name is mandatory.",
+    });
   }
 })
 
@@ -98,7 +99,10 @@ userRoutes.post("/delete", async(req, res) => {
     const oldFolder = join(usersFolder, req.body.name)
     if (existsSync(oldFolder)) {
       await deleteFolder(oldFolder)
-        .then(() => res.send('ok'))
+        .then(() => res.send({
+          status: 200,
+          message: 'User deleted successfully'
+        }))
         .catch(e => res.sendStatus(500).send({
           error: e
         }))
